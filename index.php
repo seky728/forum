@@ -2,7 +2,15 @@
 
 use Controller\HomePageController;
 
-include("Controller/Controller.php");
+/**
+ * @var Controller\Controller
+ */
+$controller = null;
+
+
+/*------------ interfaces ----------------*/
+require_once ("View/View.php");
+require_once ("Controller/Controller.php");
 
 
 if (isset($_SERVER)){
@@ -19,13 +27,14 @@ if (isset($_SERVER)){
 
 
 
-        require_once $findingFile;
+        require_once (''.$findingFile.'');
+
 
         $controller = new HomePageController("Nějaký ten homepage test text");
         $controller->requireData();
 
+
     } else {
-        var_dump($self);
         $controllerFile = __DIR__."/Controller/".$self[2]."Controller.php";
         if (file_exists($controllerFile)){
             echo "Controller ".$controllerFile." exists";

@@ -7,4 +7,5 @@ namespace View;
 interface View
 {
 
+
 }
