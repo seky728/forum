@@ -27,7 +27,7 @@ class HomePage implements Controller
 
         echo $this->test;
         $connector = new PDOConnector();
-        $articles = $connector->getArticles('select * from article where id = ?', array(1));
+        $articles = $connector->getArticles('select * from article order by timestamp', array());
 
         return $articles;
 
@@ -35,12 +35,22 @@ class HomePage implements Controller
 
     public function draw(View $view)
     {
-        echo $view->requireTemplate($this->requireData()[0]);
+        echo $view->requireTemplate($this->requireData());
     }
 
     public function actionForm()
     {
-        $text = $_POST["prispevek"];
-        echo "<h1>Tohle jsi mi poslal: $text</h1>";
+        if (isset($_POST["prispevek"])) {
+            $this->sendNew();
+        }
+
+        unset($_POST);
+    }
+
+    private function sendNew()
+    {
+        $connector = new PDOConnector();
+        $connector->insert('insert into article (Id, Title, Text, Id_user, Timestamp) Values (null, ?, ?, 1, CURRENT_TIMESTAMP)', array($_POST["title"], $_POST["text"]));
+
     }
 }

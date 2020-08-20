@@ -8,7 +8,11 @@ use Data\Data;
 interface View
 {
 
-    public function requireTemplate(Data $data);
+    /**
+     * @param Data[] $data
+     * @return mixed
+     */
+    public function requireTemplate(Array $data);
 
 
 }

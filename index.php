@@ -24,8 +24,6 @@ if (isset($_SERVER)) {
         $controllerClass = explode("/", $self);
         $controllerClass = $controllerClass[count($controllerClass) - 1];
         $controllerClass = explode(".php", $controllerClass)[0];
-        echo $controllerClass . "<br>";
-
         $path = $controllerClass;
 
     }
@@ -65,7 +63,7 @@ if (isset($_SERVER)) {
         }
 
         $controller = new $controllerClass($args);
-        if (isset($_POST)) {
+        if (!empty($_POST)) {
             $controller->actionForm();
         }
         $view = new $viewClass();

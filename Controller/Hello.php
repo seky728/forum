@@ -29,7 +29,7 @@ class Hello implements Controller
     public function requireData()
     {
         $connector = new PDOConnector();
-        $articles = $connector->getArticles('select * from article where id = ?', array(1));
+        $articles = $connector->getArticles('select * from article where id = ? order by timestamp ', array(1));
         return $articles;
     }
 
