@@ -8,7 +8,7 @@ use Services\PDOConnector;
 use View\View;
 
 
-class HomePageController implements Controller
+class HomePage implements Controller
 {
 
     public $test;
@@ -16,9 +16,10 @@ class HomePageController implements Controller
     /**
      * HomePageController constructor.
      */
-    public function __construct($test)
+    public function __construct()
     {
-        $this->test = $test;
+
+
     }
 
     public function requireData()
@@ -28,12 +29,18 @@ class HomePageController implements Controller
         $connector = new PDOConnector();
         $articles = $connector->getArticles('select * from article where id = ?', array(1));
 
-        var_dump($articles);
+        return $articles;
 
     }
 
     public function draw(View $view)
     {
+        echo $view->requireTemplate($this->requireData()[0]);
+    }
 
+    public function actionForm()
+    {
+        $text = $_POST["prispevek"];
+        echo "<h1>Tohle jsi mi poslal: $text</h1>";
     }
 }
