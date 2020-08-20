@@ -2,9 +2,10 @@
 
 
 namespace Data;
+require_once("Data.php");
 
 
-class Article
+class Article implements Data
 {
 
     private $id;
@@ -95,8 +96,6 @@ class Article
     {
         return $this->timeStamp;
     }
-
-
 
 
 }
