@@ -4,6 +4,7 @@ namespace Controller;
 
 include('Services/PDOConnector.php');
 
+use Data\Articles;
 use Services\PDOConnector;
 use View\View;
 
@@ -11,25 +12,18 @@ use View\View;
 class HomePage implements Controller
 {
 
-    public $test;
 
     /**
      * HomePageController constructor.
      */
     public function __construct()
     {
-
-
     }
 
     public function requireData()
     {
-
-        echo $this->test;
-        $connector = new PDOConnector();
-        $articles = $connector->getArticles('select * from article order by timestamp', array());
-
-        return $articles;
+        $articles = new Articles();
+        return $articles->loadArticles();
 
     }
 
@@ -49,8 +43,12 @@ class HomePage implements Controller
 
     private function sendNew()
     {
-        $connector = new PDOConnector();
-        $connector->insert('insert into article (Id, Title, Text, Id_user, Timestamp) Values (null, ?, ?, 1, CURRENT_TIMESTAMP)', array($_POST["title"], $_POST["text"]));
+        if (isset($_SESSION["userId"])) {
+            $idUser = $_SESSION["userId"];
+
+            $articles = new Articles();
+            $articles->inserArticles($_POST['title'], $_POST['text'], $idUser);
+        }
 
     }
 }

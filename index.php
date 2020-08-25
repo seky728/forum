@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 /**
  * @var Controller\Controller
@@ -28,6 +28,10 @@ if (isset($_SERVER)) {
 
     }
 
+    if (!isset($_SESSION['userId'])) {
+        $path = "user";
+    }
+
     $self = $_SERVER['REQUEST_URI'];
     $self = rtrim($self, "/"); // <--- mohlo by způsobovat provlémy, dával by se do metod další parametr a to prázdný string ""
     $self = explode("/", $self); // rozsekal jsem si url podle /, 0. by mělo být "forum", 1. file
@@ -41,6 +45,7 @@ if (isset($_SERVER)) {
         }
     }
 
+    $path = ucfirst($path);
     $controllerFile = __DIR__ . "/Controller/" . $path . ".php";
     $viewFile = __DIR__ . "/View/" . $path . ".php";
 

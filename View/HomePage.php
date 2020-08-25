@@ -28,6 +28,8 @@ class HomePage implements View
                         <button name='prispevek' type='submit'>Odeslat</button>
                         </form></div>";
 
+        $logoutBtn = "<form method='post' action='User.php'><button name='logout'>Logout</button></form>";
+
 
         $articles = "<div class='articles'>";
 
@@ -42,7 +44,7 @@ class HomePage implements View
         $articles .= "</div";
 
 
-        $body = "<body>$form $articles</body>";
+        $body = "<body>$logoutBtn $form $articles</body>";
         $footer = "";
         $template = "<html>" . $head . $body . $footer . "</html>";
         return $template;
