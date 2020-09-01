@@ -28,15 +28,14 @@ class Articles implements Data
     public function inserArticles($title, $text, $idUser)
     {
         if (empty($title) || empty($text)) {
-            die("You have to fill title and text");
-            return false;
+            print_r("Title a text nesmí být prázdný"); //TODO make error page
+        } else {
+            $sql = "insert into article (Id, Title, Text, Id_user, Timestamp) values (null, :title, :text, :idUser, CURRENT_TIMESTAMP)";
+            $connector = new PDOConnector();
+            $pdo = $connector->getPdo();
+            $sth = $pdo->prepare($sql);
+            $sth->execute(array(':title' => $title, ':text' => $text, ':idUser' => $idUser)) or die("Not able to make insert request for article");
         }
-        $sql = "insert into article (Id, Title, Text, Id_user, Timestamp) values (null, :title, :text, :idUser, CURRENT_TIMESTAMP)";
-        $connector = new PDOConnector();
-        $pdo = $connector->getPdo();
-        $sth = $pdo->prepare($sql);
-        $sth->execute(array(':title' => $title, ':text' => $text, ':idUser' => $idUser)) or die("Not able to make insert request for article");
-
     }
 
 }

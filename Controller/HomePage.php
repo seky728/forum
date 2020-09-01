@@ -5,7 +5,6 @@ namespace Controller;
 include('Services/PDOConnector.php');
 
 use Data\Articles;
-use Services\PDOConnector;
 use View\View;
 
 

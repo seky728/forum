@@ -31,6 +31,11 @@ class User implements Controller
             return;
         }
 
+
+    }
+
+    public function login()
+    {
         $name = $_POST["userName"];
         $password = $_POST["password"];
 
