@@ -1,3 +1,19 @@
+body {
+    border-collapse: separate
+}
+
 .article {
     border: blue solid medium
+}
+
+.comments {
+    border: red solid medium;
+}
+
+.comment {
+    border: black solid medium;
+}
+
+.commentForm {
+    display: none
 }

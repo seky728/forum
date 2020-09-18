@@ -2,10 +2,10 @@
 
 
 namespace Data;
-use http\Exception\RuntimeException;
 use Services\PDOConnector;
 
 require_once("Data.php");
+require_once("Article.php");
 
 
 class Articles implements Data
@@ -19,13 +19,15 @@ class Articles implements Data
         $sth->execute();
         $data = $sth->fetchAll();
         foreach ($data as $item) {
-            $articles[] = new Article($item[0], $item[1], $item[2], $item[3], $item[4]);
+            $article = new Article($item[0], $item[1], $item[2], $item[3], $item[4]);
+            $article->loadComments();
+            $articles[] = $article;
         }
         return $articles;
     }
 
 
-    public function inserArticles($title, $text, $idUser)
+    public function insertArticles($title, $text, $idUser)
     {
         if (empty($title) || empty($text)) {
             print_r("Title a text nesmí být prázdný"); //TODO make error page
@@ -38,72 +40,6 @@ class Articles implements Data
         }
     }
 
-}
-
-class Article
-{
-
-    private $id;
-    private $title;
-    private $text;
-    private $idUser;
-    private $timeStamp;
-
-    /**
-     * Article constructor.
-     * @param $id
-     * @param $title
-     * @param $text
-     * @param $idUser
-     * @param $timeStamp
-     */
-    public function __construct($id, $title, $text, $idUser, $timeStamp)
-    {
-        $this->id = $id;
-        $this->title = $title;
-        $this->text = $text;
-        $this->idUser = $idUser;
-        $this->timeStamp = $timeStamp;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdUser()
-    {
-        return $this->idUser;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTimeStamp()
-    {
-        return $this->timeStamp;
-    }
 
 }
+

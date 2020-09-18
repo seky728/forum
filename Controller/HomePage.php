@@ -31,23 +31,26 @@ class HomePage implements Controller
         echo $view->requireTemplate($this->requireData());
     }
 
-    public function actionForm()
-    {
-        if (isset($_POST["prispevek"])) {
-            $this->sendNew();
-        }
 
-        unset($_POST);
-    }
-
-    private function sendNew()
+    public function sendNew()
     {
+
         if (isset($_SESSION["userId"])) {
             $idUser = $_SESSION["userId"];
 
             $articles = new Articles();
-            $articles->inserArticles($_POST['title'], $_POST['text'], $idUser);
+            $articles->insertArticles($_POST['title'], $_POST['text'], $idUser);
         }
 
+    }
+
+    public function addComment()
+    {
+
+    }
+
+    public function actionForm()
+    {
+        // TODO: Implement actionForm() method.
     }
 }

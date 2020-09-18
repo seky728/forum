@@ -16,23 +16,22 @@ require_once("Controller/Controller.php");
 
 
 if (isset($_SERVER)) {
-
     $path = "";
 
 
-
     $self = $_SERVER['REQUEST_URI'];
-    $self = rtrim($self, "/"); // <--- mohlo by způsobovat provlémy, dával by se do metod další parametr a to prázdný string ""
+    $self = rtrim($self, "/"); // <--- mohlo by způsobovat problémy, dával by se do metod další parametr a to prázdný string ""
     $self = explode("/", $self); // rozsekal jsem si url podle /, 0. by mělo být "forum", 1. file
 
     if ($path === "") {
-        if (!isset($self[2])) {
+        if (!isset($self[1])) {
             $path = "HomePage";
         } else {
-            $path = '' . $self[2] . '';
+            $path = '' . $self[1] . '';
             $path = explode(".php", $path)[0];
         }
     }
+
 
     $path = ucfirst($path);
     $controllerFile = __DIR__ . "/Controller/" . $path . ".php";
@@ -47,23 +46,23 @@ if (isset($_SERVER)) {
 
 
         $method = "";
-        if (count($self) > 3) {
-            $method = "$self[3]";
+        if (count($self) > 2) {
+            $method = "$self[2]";
         }
 
 
         $args = "";
-        if (count($self) > 4) {
-            $args = "$self[4]";
+        if (count($self) > 2) {
+            $args = "$self[2]";
 
-            for ($i = 5; $i < count($self); $i++) {
+            for ($i = 3; $i < count($self); $i++) {
                 $args .= ", $self[$i]";
             }
             $args .= "";
 
         }
 
-        $controller = new $controllerClass($args);
+        $controller = new $controllerClass();
 
         if (!empty($method)) {
             $controller->$method($args);
