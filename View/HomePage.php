@@ -45,11 +45,13 @@ class HomePage implements View
             $articles .= "<div class = 'article'>";
             $articles .= "<div class='title'> title: " . $data[$i]->getTitle() . "</div>";
             $articles .= "<div class='text'> text: " . $data[$i]->getText() . "</div>";
-            $articles .= '<button onclick="showAddCommentBlock(' . $data[$i]->getId() . ')">Okomentovat</button>';
-            $articles .= "<div class='commentForm' id='addCommentBlock-" . $data[$i]->getId() . "'><form action='/HomePage/addComment/" . $data[$i]->getId() . "' method='post'>
-                            <label>Komentar: </label><input type='text'>
+            if (isset($_SESSION['userId'])) {
+                $articles .= '<button onclick="showAddCommentBlock(' . $data[$i]->getId() . ')">Okomentovat</button>';
+                $articles .= "<div class='commentForm' id='addCommentBlock-" . $data[$i]->getId() . "'><form action='/HomePage/addComment/" . $data[$i]->getId() . "' method='post'>
+                            <label>Komentar: </label><input type='text' name='commentText'>
                             <button>Odeslat komentář</button>
                             </form></div>";
+            }
             $commentsCount = count($data[$i]->getComments());
             if ($commentsCount > 0) {
                 $commentBlock = "<div class='comments'>";

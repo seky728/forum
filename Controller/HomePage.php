@@ -5,6 +5,7 @@ namespace Controller;
 include('Services/PDOConnector.php');
 
 use Data\Articles;
+use Data\Comment;
 use View\View;
 
 
@@ -44,9 +45,14 @@ class HomePage implements Controller
 
     }
 
-    public function addComment()
+    public function addComment($idArticle)
     {
+        if (isset($_POST)) {
+            $text = $_POST['commentText'];
+            $comment = new Comment("", $text, null, $_SESSION['userId'], $idArticle);
+            $comment->insertComment();
 
+        }
     }
 
     public function actionForm()

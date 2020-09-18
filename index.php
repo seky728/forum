@@ -53,11 +53,12 @@ if (isset($_SERVER)) {
 
         $args = "";
         if (count($self) > 2) {
-            $args = "$self[2]";
+
 
             for ($i = 3; $i < count($self); $i++) {
-                $args .= ", $self[$i]";
+                $args .= "$self[$i],";
             }
+            $args = rtrim($args, ",");
             $args .= "";
 
         }
