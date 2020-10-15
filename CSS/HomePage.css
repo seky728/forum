@@ -1,19 +1,152 @@
 body {
-    border-collapse: separate
+    border-collapse: separate;
+    background-color: rgb(239, 235, 235);
 }
+
+button {
+    background-color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.articles {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 
 .article {
-    border: blue solid medium
+    margin-bottom: 2cm;
+    text-align: center;
+    text-indent: 30px;
+    background-color: #a9a5a5;
+    padding-bottom: 1%;
 }
 
+.article .title {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 40px;
+    background-color: rgba(0, 0, 128, 0.8);
+}
+
+.line {
+    height: 1px;
+    width: 97%;
+    background-color: black;
+    margin: 1% auto;
+}
+
+.article .text {
+    text-align: justify;
+    font-family: Verdana, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+/ / text-transform: normal;
+    letter-spacing: normal;
+    line-height: 1.5em;
+    background-color: rgba(0, 0, 128, 0.6);
+    padding: 2%;
+}
+
+
 .comments {
-    border: red solid medium;
+    width: 80%;
+    margin-left: 10%;
 }
 
 .comment {
-    border: black solid medium;
+    margin-bottom: 1%;
+    clear: both;
+
 }
 
 .commentForm {
-    display: none
+    display: none;
+    text-indent: 0;
 }
+
+.commentForm input {
+    width: 64%;
+    height: 40px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.commentForm button {
+    width: 28%;
+    height: 40px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.background {
+    width: 100%;
+    height: auto;
+
+
+}
+
+.articleButtons button {
+    margin: 1%;
+    width: 46%;
+    height: 4%;
+}
+
+.commentText {
+    background-color: rgb(239, 235, 235);
+    width: 80%;
+    margin-left: 20%;
+    padding: 2%;
+    text-align: justify;
+}
+
+.commentUser {
+    float: left;
+    background-color: #989494;
+    width: 20%;
+}
+
+.commentUser .time {
+    font-size: 10px;
+}
+
+.newsForm label {
+    display: inline-block;
+    width: 150px;
+}
+
+.newsForm .title input {
+    width: 70%;
+    height: 40px;
+}
+
+.newsForm .title, .newsForm .text {
+    margin-bottom: 10px;
+}
+
+.newsForm textarea {
+    width: 70%;
+    vertical-align: top;
+    height: 20%;
+}
+
+.newsForm button {
+    margin-left: 150px;
+    display: block;
+    width: 70%;
+    height: 40px;
+}
+
+.newsForm {
+    padding: 3%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+
+

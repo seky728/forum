@@ -12,6 +12,17 @@ require_once "Data/User.php";
 
 class User implements Controller
 {
+    private $pdoConnector;
+
+    /**
+     * User constructor.
+     * @param $pdoConnector
+     */
+    public function __construct($pdoConnector)
+    {
+        $this->pdoConnector = $pdoConnector;
+    }
+
 
     public function requireData()
     {
@@ -39,14 +50,16 @@ class User implements Controller
         $name = $_POST["userName"];
         $password = $_POST["password"];
 
-        $user = new \Data\User();
+        $user = new \Data\User($this->pdoConnector);
         $user->loginUser($name, $password);
         unset($_POST);
     }
 
     public function logout()
     {
-        $user = new \Data\User();
+        $user = new \Data\User($this->pdoConnector);
         $user->logout();
     }
+
+
 }

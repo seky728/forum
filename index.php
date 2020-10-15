@@ -1,4 +1,7 @@
 <?php
+
+use Services\PDOConnector;
+
 session_start();
 
 /**
@@ -41,6 +44,7 @@ if (isset($_SERVER)) {
     if (file_exists($controllerFile)) {
         require_once $controllerFile;
         require_once $viewFile;
+        require_once("Services/PDOConnector.php");
         $controllerClass = $__NAMESPACE_CONTROLLER_ . $path;
         $viewClass = $__NAMESPACE_VIEW_ . $path;
 
@@ -62,8 +66,9 @@ if (isset($_SERVER)) {
             $args .= "";
 
         }
+        $pdoConnector = new PDOConnector();
 
-        $controller = new $controllerClass();
+        $controller = new $controllerClass($pdoConnector);
 
         if (!empty($method)) {
             $controller->$method($args);

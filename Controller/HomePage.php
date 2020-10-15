@@ -13,16 +13,19 @@ class HomePage implements Controller
 {
 
 
+    private $pdoConnector;
+
     /**
      * HomePageController constructor.
      */
-    public function __construct()
+    public function __construct($pdoConnector)
     {
+        $this->pdoConnector = $pdoConnector;
     }
 
     public function requireData()
     {
-        $articles = new Articles();
+        $articles = new Articles($this->pdoConnector);
         return $articles->loadArticles();
 
     }
@@ -39,7 +42,7 @@ class HomePage implements Controller
         if (isset($_SESSION["userId"])) {
             $idUser = $_SESSION["userId"];
 
-            $articles = new Articles();
+            $articles = new Articles($this->pdoConnector);
             $articles->insertArticles($_POST['title'], $_POST['text'], $idUser);
         }
 
@@ -49,7 +52,7 @@ class HomePage implements Controller
     {
         if (isset($_POST)) {
             $text = $_POST['commentText'];
-            $comment = new Comment("", $text, null, $_SESSION['userId'], $idArticle);
+            $comment = new Comment($this->pdoConnector, "", $text, null, $_SESSION['userId'], $idArticle);
             $comment->insertComment();
 
         }
