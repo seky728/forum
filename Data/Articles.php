@@ -14,7 +14,7 @@ class Articles implements Data
 
     /**
      * Articles constructor.
-     * @param $pdoConnector
+     * @param PDOConnector $pdoConnector
      */
     public function __construct($pdoConnector)
     {
@@ -53,6 +53,35 @@ class Articles implements Data
             $sth = $pdo->prepare($sql);
             $sth->execute(array(':title' => $title, ':text' => $text, ':idUser' => $idUser)) or die("Not able to make insert request for article");
         }
+    }
+
+
+    public function loadArticle($id)
+    {
+        $sql = "select * from article where id = :id";
+        $pdo = $this->pdoConnector->getPdo();
+        $sth = $pdo->prepare($sql);
+        $sth->execute(["id" => $id]) or die ("Not able to load article");
+        if ($sth->rowCount() == 0) {
+            throw new \RuntimeException("Article with this id does not exists");
+        }
+        $data = $sth->fetchAll();
+
+        return new Article($this->pdoConnector, $data[0][0], $data[0][1], $data[0][2], $data[0][3], $data[0][4]);
+    }
+
+
+    public function deleteArticle($id)
+    {
+        $article = $this->loadArticle($id);
+
+        if ($_SESSION["userId"] == $article->getIdUser() || $_SESSION["Rights"]) {
+            $sql = "DELETE FROM article WHERE article.Id = :id";
+            $pdo = $this->pdoConnector->getPdo();
+            $sth = $pdo->prepare($sql);
+            $sth->execute(["id" => $id]) or die("Not able to delete article");
+        }
+
     }
 
 

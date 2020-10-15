@@ -58,6 +58,30 @@ class HomePage implements Controller
         }
     }
 
+    public function deleteArticle($id)
+    {
+        $articles = new Articles($this->pdoConnector);
+        $articles->deleteArticle($id);
+
+
+    }
+
+    public function editArticle($id)
+    {
+
+    }
+
+    public function deleteComment($id)
+    {
+
+    }
+
+
+    public function editComment($id)
+    {
+
+    }
+
     public function actionForm()
     {
         // TODO: Implement actionForm() method.

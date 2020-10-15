@@ -6,8 +6,10 @@ namespace View;
 
 use Data\Data;
 use Navigation;
+use SharedBlocks\ArticlesManagementMenu;
 
 require_once "SharedBlocks/Navigation.php";
+require_once "SharedBlocks/ArticlesManagementMenu.php";
 
 
 class HomePage implements View
@@ -20,7 +22,7 @@ class HomePage implements View
      */
     public function requireTemplate(Array $data)
     {
-
+        $articleMenu = new ArticlesManagementMenu();
 
         $css = "<link rel='stylesheet' href='/CSS/GlobalStyles.css' type='text/css'>
                 <link rel='stylesheet' href='/CSS/Navigation.css' type='text/css'>
@@ -40,7 +42,7 @@ class HomePage implements View
 
         if (isset($_SESSION['userId'])) {
 
-            $form = '<div class="newsForm"><form action="/HomePage/sendNew" method="post">
+            $form = '<div class="newsForm"><form action="/HomePage/sendNew" method="post" onsubmit="return checkArticleNewForm()">
                         <div class="title">
                         <label>Napiš title:</label><input type="text" name="title">
                         </div>
@@ -58,6 +60,9 @@ class HomePage implements View
             $articles .= "<div class = 'article'>";
             $articles .= "<div class = 'background'>";
             $articles .= "<div class='title'>" . $data[$i]->getTitle() . "</div>";
+            if ((isset($_SESSION["Rights"]) && $_SESSION["Rights"] < 3) || (isset($_SESSION["userId"]) && $data[$i]->getIdUser() == $_SESSION["userId"])) {
+                $articles .= $articleMenu->requireArticleMenu($data[$i]->getId());
+            }
             $articles .= "<div class='text'>" . $data[$i]->getText() . "</div>";
             $articles .= "</div>";
             if (isset($_SESSION['userId'])) {
@@ -65,9 +70,9 @@ class HomePage implements View
                 $articles .= '<div class="line"></div>';
                 $articles .= '<button id="reportButton" onclick="reportArticle(' . $data[$i]->getId() . ')">Report</button>';
                 $articles .= '<button id="commentButton" onclick="showAddCommentBlock(' . $data[$i]->getId() . ')">Okomentovat</button>';
-
                 $articles .= '</div>';
-                $articles .= "<div class='commentForm' id='addCommentBlock-" . $data[$i]->getId() . "'><form action='/HomePage/addComment/" . $data[$i]->getId() . "' method='post'>
+                $articles .= "<div class='commentForm' id='addCommentBlock-" . $data[$i]->getId() . "'>
+                <form action='/HomePage/addComment/" . $data[$i]->getId() . "' method='post' onsubmit='return checkComment(" . ($data[$i]->getId()) . ")'>
                             <input type='text' name='commentText'>
                             <button>Odeslat komentář</button>
                             </form></div>";
@@ -80,6 +85,9 @@ class HomePage implements View
                     $comment = $data[$i]->getComments()[$l];
                     $commentBlock .= "<div class='comment'>";
                     $commentBlock .= "<div class='commentUser' title='" . $comment->getTimeStamp() . "'>" . $comment->getAuthorName() . "</div>";
+                    if ((isset($_SESSION["Rights"]) && $_SESSION["Rights"] < 3) || (isset($_SESSION["userId"]) && $comment->getIdUser() == $_SESSION["userId"])) {
+                        $commentBlock .= $articleMenu->requireCommentMenu($comment->getId());
+                    }
                     $commentBlock .= "<div class='commentText'>" . $comment->getText() . "</div>";
 
                     $commentBlock .= "</div>";

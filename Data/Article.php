@@ -24,7 +24,7 @@ class Article
 
     /**
      * Article constructor.
-     * @param $pdoConnector
+     * @param PDOConnector $pdoConnector
      * @param $id
      * @param $title
      * @param $text
@@ -60,6 +60,7 @@ class Article
         }
 
     }
+
 
     /**
      * @return array

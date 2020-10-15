@@ -85,5 +85,13 @@ class Comment implements Data
         $this->authorName = $authorName;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
 
 }
