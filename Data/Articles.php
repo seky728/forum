@@ -24,7 +24,7 @@ class Articles implements Data
 
     public function loadArticles()
     {
-        $sql = "select * from article order by timestamp ";
+        $sql = "select * from article order by timestamp DESC ";
 
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);

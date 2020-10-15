@@ -1,0 +1,27 @@
+nav li {
+    display: inline-block;
+    width: 10%;
+    background-color: #989494;
+    padding: 10px;
+    height: 25px;
+    margin: 0 0 0 1px;
+}
+
+
+nav li a {
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+nav li:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+nav {
+    text-align: right;
+    background-color: #a9a5a5;
+
+}

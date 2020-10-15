@@ -5,9 +5,14 @@ namespace View;
 
 
 use Data\Data;
+use Navigation;
+
+require_once "SharedBlocks/Navigation.php";
+
 
 class HomePage implements View
 {
+
 
     /**
      * @param Data[] $data
@@ -17,13 +22,21 @@ class HomePage implements View
     {
 
 
-        $css = "<link rel='stylesheet' href='/CSS/HomePage.css' type='text/css'>";
+        $css = "<link rel='stylesheet' href='/CSS/GlobalStyles.css' type='text/css'>
+                <link rel='stylesheet' href='/CSS/Navigation.css' type='text/css'>
+                <link rel='stylesheet' href='/CSS/HomePage.css' type='text/css'>";
 
         $js = "<script src='/JS/homePage.js'></script>";
 
-        $head = "<head>$css.$js</head>";
+        $head = "<!DOCTYPE html>
+                    <html lang=\"en\">
+                        <head><meta charset=\"UTF-8\">
+                            <title>Forum</title>$css $js</head>";
         $logoutBtn = "";
         $form = "";
+        $nav = new Navigation();
+        $nav = $nav->returnTemplate();
+
 
         if (isset($_SESSION['userId'])) {
 
@@ -36,10 +49,6 @@ class HomePage implements View
                          </div>
                         <button name="prispevek" type="submit">Odeslat</button>
                         </form></div>';
-
-            $logoutBtn = "<form method='post' action='/User/logout'><button name='logout'>Logout</button></form>";
-        } else {
-            $logoutBtn = "<form method='post' action='User'><button name='login'>Login</button> </form>";
         }
 
         $articles = "<div class='articles'>";
@@ -85,7 +94,7 @@ class HomePage implements View
         $articles .= "</div>";
 
 
-        $body = "<body>$logoutBtn $form $articles</body>";
+        $body = "<body>$nav $logoutBtn $form $articles</body>";
         $footer = "";
         $template = "<html>" . $head . $body . $footer . "</html>";
         return $template;

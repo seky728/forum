@@ -1,0 +1,28 @@
+.loginBlock, .delimiterBlock, .registerBlock {
+    float: left;
+}
+
+label {
+    width: 150px;
+    display: inline-block;
+}
+
+input {
+    display: inline-block;
+    width: 50%;
+    margin-bottom: 10px;
+}
+
+.loginBlock, .registerBlock {
+    background-color: #989494;
+    width: 49%;
+    height: 240px;
+    border-radius: 5%;
+}
+
+.delimiterBlock {
+    height: 220px;
+    margin-top: 10px;;
+    width: 1px;
+    background-color: black;
+}

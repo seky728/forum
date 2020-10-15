@@ -1,0 +1,19 @@
+body {
+    border-collapse: separate;
+    background-color: rgb(239, 235, 235);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+button {
+    background-color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+li {
+    list-style-type: none;
+}

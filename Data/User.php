@@ -12,6 +12,7 @@ require_once "Data.php";
 require_once "Services/PDOConnector.php";
 
 
+
 class User implements Data
 {
 
@@ -35,13 +36,17 @@ class User implements Data
 
     public function loginUser($userName, $password)
     {
+        $userName = htmlspecialchars($userName);
+        $password = htmlspecialchars($password);
 
         $pdo = $this->pdoConnector->getPdo();
         $sql = "select * from users where User_name = :userName";
         $sth = $pdo->prepare($sql);
         $sth->execute([":userName" => $userName]) or die("Not able to select user by userName");
-        if ($sth->columnCount() == 0) {
-            throw new RuntimeException("Nikdo takový nebyl v db nalezen");
+
+        if ($sth->rowCount() == 0) {
+
+            throw new \RuntimeException("Nikdo takový nebyl v db nalezen");
         }
 
         $user = $sth->fetchAll()[0];
@@ -59,7 +64,7 @@ class User implements Data
         $sth = $pdo->prepare($sql);
         $sth->execute(["idUser" => $id]) or die("not able to load user");
         if ($sth->columnCount() == 0) {
-            throw new RuntimeException("Nikdo nebyl nalezen");
+            throw new \RuntimeException("Nikdo nebyl nalezen");
         }
 
         $user = $sth->fetchAll()[0];
@@ -75,6 +80,54 @@ class User implements Data
         $this->userName = $userName;
     }
 
+
+    public function registerUser($name, $surname, $email, $userName, $password)
+    {
+        $name = htmlspecialchars($name);
+        $surname = htmlspecialchars($surname);
+        $email = htmlspecialchars($email);
+        $userName = htmlspecialchars($userName);
+        $password = htmlspecialchars($password);
+
+        if ($this->isUserExtistByEmail($email)) {
+            throw new \RuntimeException("tento email je již registrovaný");
+        }
+
+        if ($this->isUserExsitByNickName($userName)) {
+            throw new \RuntimeException("Tato přezdívka je již použitá");
+        }
+
+        $pdo = $this->pdoConnector->getPdo();
+        $sql = "INSERT INTO users (Id,Name, Surname, Email, User_name, Password) VALUES (NULL, :name, :surname, :email, :userName, :password);";
+        $sth = $pdo->prepare($sql);
+        $sth->execute(["name" => $name, "surname" => $surname, "email" => $email, "userName" => $userName, "password" => $password]) or die("not able to register user");
+    }
+
+    public function isUserExtistByEmail($email)
+    {
+        $pdo = $this->pdoConnector->getPdo();
+        $sql = "select email from users where email like :email";
+        $sth = $pdo->prepare($sql);
+        $sth->execute(["email" => $email]) or die("not able to load email from db");
+        if ($sth->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isUserExsitByNickName($nickName)
+    {
+        $pdo = $this->pdoConnector->getPdo();
+        $sql = "select user_name from users where user_name like :userName";
+        $sth = $pdo->prepare($sql);
+        $sth->execute(["userName" => $nickName]) or die("not able to load nick name from db");
+        if ($sth->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function logout()
     {
