@@ -2,10 +2,12 @@
 
 
 namespace Data;
+use Services\CheckText;
 use Services\PDOConnector;
 
 require_once("Data.php");
 require_once("Article.php");
+require_once("Services/CheckText.php");
 
 
 class Articles implements Data
@@ -34,7 +36,7 @@ class Articles implements Data
             $idUser = $item[3];
             $user = new User($this->pdoConnector);
             $user->loadUserName($idUser);
-            $article = new Article($this->pdoConnector, $item[0], $item[1], $item[2], $item[3], $item[4]);
+            $article = new Article($this->pdoConnector, $item[0], CheckText::allowTags($item[1]), CheckText::allowTags($item[2]), $item[3], $item[4]);
             $article->loadComments();
             $article->setAuthorName($user->getUserName());
             $articles[] = $article;
@@ -45,6 +47,7 @@ class Articles implements Data
 
     public function insertArticles($title, $text, $idUser)
     {
+
         if (empty($title) || empty($text)) {
             print_r("Title a text nesmí být prázdný"); //TODO make error page
         } else {

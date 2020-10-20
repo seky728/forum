@@ -55,7 +55,7 @@ class User implements Data
             throw new RuntimeException("Hesla se neshodují");
         }
         $_SESSION["userId"] = $user["Id"];
-        $_SESSION["rights"] = $user["Rights"];
+        $_SESSION["Rights"] = $user["Rights"];
     }
 
     public function loadUserName($id)

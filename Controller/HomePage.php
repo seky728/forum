@@ -39,11 +39,13 @@ class HomePage implements Controller
     public function sendNew()
     {
 
-        if (isset($_SESSION["userId"])) {
+        if (isset($_SESSION["userId"]) && $_POST['title'] != "" && $_POST['text'] != "") {
             $idUser = $_SESSION["userId"];
 
             $articles = new Articles($this->pdoConnector);
             $articles->insertArticles($_POST['title'], $_POST['text'], $idUser);
+        } else {
+            echo "musí být vyplněny políčka";
         }
 
     }
@@ -52,6 +54,7 @@ class HomePage implements Controller
     {
         if (isset($_POST)) {
             $text = $_POST['commentText'];
+            $text = htmlspecialchars($text);
             $comment = new Comment($this->pdoConnector, "", $text, null, $_SESSION['userId'], $idArticle);
             $comment->insertComment();
 

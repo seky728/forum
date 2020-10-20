@@ -28,12 +28,13 @@ class HomePage implements View
                 <link rel='stylesheet' href='/CSS/Navigation.css' type='text/css'>
                 <link rel='stylesheet' href='/CSS/HomePage.css' type='text/css'>";
 
-        $js = "<script src='/JS/homePage.js'></script>";
+       $js = "<script src='/JS/homePage.js'></script>";
+
 
         $head = "<!DOCTYPE html>
                     <html lang=\"en\">
                         <head><meta charset=\"UTF-8\">
-                            <title>Forum</title>$css $js</head>";
+                            <title>Forum</title>$css </head>";
         $logoutBtn = "";
         $form = "";
         $nav = new Navigation();
@@ -84,10 +85,11 @@ class HomePage implements View
                 for ($l = 0; $l < $commentsCount; $l++) {
                     $comment = $data[$i]->getComments()[$l];
                     $commentBlock .= "<div class='comment'>";
-                    $commentBlock .= "<div class='commentUser' title='" . $comment->getTimeStamp() . "'>" . $comment->getAuthorName() . "</div>";
+                    $commentBlock .= "<div class='commentUser' title='" . $comment->getTimeStamp() . "'>" . $comment->getAuthorName();
                     if ((isset($_SESSION["Rights"]) && $_SESSION["Rights"] < 3) || (isset($_SESSION["userId"]) && $comment->getIdUser() == $_SESSION["userId"])) {
                         $commentBlock .= $articleMenu->requireCommentMenu($comment->getId());
                     }
+                    $commentBlock .= "</div>";
                     $commentBlock .= "<div class='commentText'>" . $comment->getText() . "</div>";
 
                     $commentBlock .= "</div>";
@@ -104,7 +106,7 @@ class HomePage implements View
 
         $body = "<body>$nav $logoutBtn $form $articles</body>";
         $footer = "";
-        $template = "<html>" . $head . $body . $footer . "</html>";
+        $template = "<html>" . $head . $body . $footer . $js . "</html>";
         return $template;
     }
 }
