@@ -106,7 +106,7 @@ class HomePage implements View
 
         $body = "<body>$nav $logoutBtn $form $articles</body>";
         $footer = "";
-        $template = "<html>" . $head . $body . $footer . $js . "</html>";
+        $template = $head . $body . $footer . $js . "</html>";
         return $template;
     }
 }

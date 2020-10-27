@@ -38,16 +38,7 @@ function checkComment(id) {
     return true;
 }
 
-/*
-document.querySelector("textarea").addEventListener("keydown", (e) => {
-    let notAllowed = ["i"];
-    for (i = 0; i < notAllowed.length; i++){
-        if (e.key === notAllowed[i]){
-            alert("Znak "+notAllowed[i]+" není v tomto poli povolen");
-        }
-    }
-});
- */
+
 
 
 
