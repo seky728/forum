@@ -14,6 +14,9 @@ class HomePage implements Controller
 
 
     private $pdoConnector;
+    private $data = array();
+    private $numOnPage = 5;
+
 
     /**
      * HomePageController constructor.
@@ -26,13 +29,42 @@ class HomePage implements Controller
     public function requireData()
     {
         $articles = new Articles($this->pdoConnector);
-        return $articles->loadArticles();
+        $articles->maxPages($this->numOnPage);
+        $_SESSION["maxPages"] = $articles->getMaxPages()[0]; //bohužel jsem prostě neměl jinou možnost jak to přenést do view
 
+        if (empty($this->data)) {
+
+            $this->data = $articles->loadArticles();
+        }
+    }
+
+    public function pagination($page, $numOnPage = "")
+    {
+
+        if ($numOnPage === "") {
+            $numOnPage = $this->numOnPage;
+        } else {
+            $this->numOnPage = $numOnPage;
+        }
+
+        $articles = new Articles($this->pdoConnector);
+
+
+        if ($page <= (int)$_SESSION["maxPages"]) {
+            $this->data = $articles->loadArticles($page, $numOnPage);
+
+        } else {
+            var_dump($_SESSION["maxPages"]);
+            $this->data = $articles->loadArticles($_SESSION["maxPages"], $numOnPage);
+
+
+        }
     }
 
     public function draw(View $view)
     {
-        echo $view->requireTemplate($this->requireData());
+        $this->requireData();
+        echo $view->requireTemplate($this->data);
     }
 
 
@@ -84,6 +116,7 @@ class HomePage implements Controller
     {
 
     }
+
 
     public function actionForm()
     {

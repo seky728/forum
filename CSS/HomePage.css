@@ -150,6 +150,20 @@ a {
 }
 
 
+footer {
+    font-size: 50px
+}
+
+footer div {
+    float: left;
+    margin-right: 10%;
+    margin-bottom: 50px;
+}
+
+footer div:hover {
+    opacity: .5
+}
+
 
 
 

@@ -13,6 +13,7 @@ require_once("Services/CheckText.php");
 class Articles implements Data
 {
     private $pdoConnector;
+    private $maxPages;
 
     /**
      * Articles constructor.
@@ -23,10 +24,25 @@ class Articles implements Data
         $this->pdoConnector = $pdoConnector;
     }
 
-
-    public function loadArticles()
+    public function maxPages($numOnPage)
     {
-        $sql = "select * from article order by timestamp DESC ";
+        $sql = "select COUNT(id)/:numOnPage from article";
+        $pdo = $this->pdoConnector->getPdo();
+        $sth = $pdo->prepare($sql);
+        $sth->execute([":numOnPage" => $numOnPage]) or die("Not able to calculate max count of pages");
+        $data = $sth->fetchAll();
+        $this->maxPages = $data[0];
+    }
+
+
+    public function loadArticles($page = 0, $numOnPage = 5)
+    {
+
+        $offset = (int)$page * $numOnPage;
+
+
+        $sql = 'select * from article order by timestamp DESC limit ' . $numOnPage . ' offset ' . $offset . ' ';
+        $articles = array();
 
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
@@ -85,6 +101,14 @@ class Articles implements Data
             $sth->execute(["id" => $id]) or die("Not able to delete article");
         }
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMaxPages()
+    {
+        return $this->maxPages;
     }
 
 

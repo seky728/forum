@@ -55,23 +55,24 @@ if (isset($_SERVER)) {
         }
 
 
-        $args = "";
+        $args = array();
         if (count($self) > 2) {
 
 
             for ($i = 3; $i < count($self); $i++) {
-                $args .= "$self[$i],";
+                $args[] .= $self[$i];
             }
-            $args = rtrim($args, ",");
-            $args .= "";
+
 
         }
+
         $pdoConnector = new PDOConnector();
 
         $controller = new $controllerClass($pdoConnector);
-
         if (!empty($method)) {
-            $controller->$method($args);
+
+            call_user_func_array(array($controller, $method), $args);
+            // $controller->$method(implode(",",$args));
         }
 
         $view = new $viewClass();

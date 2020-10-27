@@ -25,3 +25,7 @@ nav {
     background-color: #a9a5a5;
 
 }
+
+nav ul {
+    margin-top: 0;
+}
