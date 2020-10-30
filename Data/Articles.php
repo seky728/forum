@@ -108,7 +108,7 @@ class Articles implements Data
      */
     public function getMaxPages()
     {
-        return $this->maxPages;
+        return $this->maxPages[0];
     }
 
 

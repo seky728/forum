@@ -21,19 +21,15 @@ class SignPage implements Controller
 
     public function requireData()
     {
-        // TODO: Implement requireData() method.
+        //není potřeba načítat data při načítání stránky
+        return null;
     }
 
     public function draw(View $view)
     {
-        // TODO: Implement draw() method.
         echo $view->requireTemplate(array());
     }
 
-    public function actionForm()
-    {
-        // TODO: Implement actionForm() method.
-    }
 
     public function login()
     {

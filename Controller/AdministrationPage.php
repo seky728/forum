@@ -34,15 +34,10 @@ class AdministrationPage implements Controller
 
     public function draw(View $view)
     {
-        // TODO: Implement draw() method.
         $this->requireData();
         echo $view->requireTemplate($this->requireData());
     }
 
-    public function actionForm()
-    {
-        // TODO: Implement actionForm() method.
-    }
 
 
     public function editUser()

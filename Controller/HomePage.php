@@ -16,6 +16,8 @@ class HomePage implements Controller
     private $pdoConnector;
     private $data = array();
     private $numOnPage = 5;
+    private $maxPages = 0;
+    private $currentPage = 0;
 
 
     /**
@@ -30,7 +32,7 @@ class HomePage implements Controller
     {
         $articles = new Articles($this->pdoConnector);
         $articles->maxPages($this->numOnPage);
-        $_SESSION["maxPages"] = $articles->getMaxPages()[0]; //bohužel jsem prostě neměl jinou možnost jak to přenést do view
+        $this->maxPages = $articles->getMaxPages()[0];
 
         if (empty($this->data)) {
 
@@ -41,22 +43,25 @@ class HomePage implements Controller
     public function pagination($page, $numOnPage = "")
     {
 
+        $this->currentPage = $page;
+
         if ($numOnPage === "") {
             $numOnPage = $this->numOnPage;
+
         } else {
             $this->numOnPage = $numOnPage;
+
         }
 
         $articles = new Articles($this->pdoConnector);
+        $articles->maxPages($numOnPage);
+        $this->maxPages = (int)$articles->getMaxPages();
 
-
-        if ($page <= (int)$_SESSION["maxPages"]) {
+        if ($page <= $this->maxPages) {
             $this->data = $articles->loadArticles($page, $numOnPage);
 
         } else {
-            var_dump($_SESSION["maxPages"]);
-            $this->data = $articles->loadArticles($_SESSION["maxPages"], $numOnPage);
-
+            $this->data = $articles->loadArticles($this->maxPages, $numOnPage);
 
         }
     }
@@ -64,6 +69,19 @@ class HomePage implements Controller
     public function draw(View $view)
     {
         $this->requireData();
+        $view->setMaxPage($this->maxPages);
+        if ($this->currentPage + 1 <= $this->maxPages) {
+            $view->setNextPage($this->currentPage + 1);
+        } else {
+            $view->setNextPage(null);
+        }
+
+        if ($this->currentPage - 1 >= 0) {
+            $view->setPreviousPage($this->currentPage - 1);
+        } else {
+            $view->setPreviousPage(null);
+        }
+
         echo $view->requireTemplate($this->data);
     }
 
@@ -98,28 +116,26 @@ class HomePage implements Controller
         $articles = new Articles($this->pdoConnector);
         $articles->deleteArticle($id);
 
-
     }
 
     public function editArticle($id)
     {
-
+        //TODO
+        echo "<script>alert('not working yet')</script>";
     }
 
     public function deleteComment($id)
     {
-
+        //TODO
+        echo "<script>alert('not working yet')</script>";
     }
 
 
     public function editComment($id)
     {
-
+        //TODO
+        echo "<script>alert('not working yet')</script>";
     }
 
 
-    public function actionForm()
-    {
-        // TODO: Implement actionForm() method.
-    }
 }

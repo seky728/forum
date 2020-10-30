@@ -17,6 +17,9 @@ require_once "Services/WorkWithUrl.php";
 class HomePage implements View
 {
 
+    private $maxPage = 0;
+    private $nextPage = 0;
+    private $previousPage = 0;
 
     /**
      * @param Data[] $data
@@ -108,46 +111,14 @@ class HomePage implements View
 
         $body = "<body>$nav $logoutBtn $form $articles</body>";
 
-        $aktualPage = "";
-        $numOnPage = "";
-
-        $previousPage = "";
-        $nextPage = "";
-
-        $args = WorkWithUrl::getAtributesFromUrl();
-     
-        if (!empty($args) && WorkWithUrl::getMethodFromUrl() === "pagination") {
-
-
-            if (count($args) == 2) {
-                $aktualPage = $args[0];
-                $numOnPage = $args[1];
-
-
-            } else if (count($args) < 2) {
-                $aktualPage = $args[0];
-            }
-        } else {
-            $aktualPage = 0;
-        }
-
-        if ($numOnPage !== "") {
-            $previousPage = ($aktualPage - 1) . "/" . $numOnPage;
-            $nextPage = ($aktualPage + 1) . "/" . $numOnPage;
-        } else {
-            $previousPage = ($aktualPage - 1);
-            $nextPage = ($aktualPage + 1);
-        }
-
 
         $footer = "<footer>";
-
-        if ($aktualPage >= 1) {
-            $footer .= "<div class='paganationBack'><a href='/HomePage/pagination/" . $previousPage . "'> < Vzad </a></div>";
+        if ($this->previousPage !== null) {
+            $footer .= "<div class='paganationBack'><a href='/HomePage/pagination/" . $this->previousPage . "'> < Vzad </a></div>";
         }
 
-        if ($aktualPage < $_SESSION["maxPages"] - 1) {
-            $footer .= "<div class='paganationFront'><a href='/HomePage/pagination/" . $nextPage . "'> Vpřed > </a></div>";
+        if ($this->nextPage !== null) {
+            $footer .= "<div class='paganationFront'><a href='/HomePage/pagination/" . $this->nextPage . "'> Vpřed > </a></div>";
         }
 
         $footer .= "</footer>";
@@ -155,4 +126,31 @@ class HomePage implements View
         $template = $head . $body . $footer . $js . "</html>";
         return $template;
     }
+
+
+    /**
+     * @param int $maxPage
+     */
+    public function setMaxPage($maxPage)
+    {
+        $this->maxPage = $maxPage;
+    }
+
+    /**
+     * @param int $nextPage
+     */
+    public function setNextPage($nextPage)
+    {
+        $this->nextPage = $nextPage;
+    }
+
+    /**
+     * @param int $previousPage
+     */
+    public function setPreviousPage($previousPage)
+    {
+        $this->previousPage = $previousPage;
+    }
+
+
 }

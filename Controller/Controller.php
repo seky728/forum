@@ -13,6 +13,4 @@ interface Controller
 
     public function draw(View $view);
 
-    public function actionForm();
-
 }
