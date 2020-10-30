@@ -4,6 +4,7 @@
 namespace Controller;
 
 
+use http\Exception\RuntimeException;
 use View\View;
 
 class SignPage implements Controller
@@ -41,9 +42,13 @@ class SignPage implements Controller
     public function register()
     {
         $user = new \Data\User($this->pdoConenctor);
-        $user->registerUser($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["nickName"], $_POST["password"]);
-        $user->loginUser($_POST["nickName"], $_POST["password"]);
-        header("Location: /Homepage");
+        if ($_POST["name"] != "" && $_POST["surname"] != "" && $_POST["email"] != "" && $_POST["nickName"] != "" && $_POST["password"] && $_POST["password"] === $_POST["passwordAgain"]) {
+            $user->registerUser($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["nickName"], $_POST["password"]);
+            $user->loginUser($_POST["nickName"], $_POST["password"]);
+            header("Location: /Homepage");
+        } else {
+            throw new RuntimeException("Registrace nebyla správně vyplěna");
+        }
     }
 
     public function logout()
