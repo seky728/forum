@@ -14,13 +14,18 @@ $__NAMESPACE_CONTROLLER_ = "Controller\\";
 $__NAMESPACE_VIEW_ = "\\View\\";
 
 /*------------ interfaces ----------------*/
+// TODO: tyhle veci je lepsi resit autoloadrem viz, ktery si muzes zaregistrovat pres funkci spl_autoload_register
+// TODO: viz https://www.php.net/manual/en/language.oop5.autoload.php
+// TODO: pak vsechny tridy, ktere nemas requirenute skoci do autoloaderu a tam dle nejake logiky (kterou si nadefinujes) tu tridu nactou
+// TODO: to jak ten autoloader nadefinuješ by v ideálním případě mělo odpovídat PSR-4 standardu viz https://www.php-fig.org/psr/psr-4/
+// TODO: kdyby tu nebylo neco jasne, tak se určite ptes.
 require_once("View/View.php");
 require_once("Controller/Controller.php");
 
 
 if (isset($_SERVER)) {
-    $path = "";
-
+    $path = ""; // TODO: v PHP se obecne vice priklani k pouziti single quotes ($path = '';) - je to mene nachylne na chyby a lehce rychlejsi
+    // TODO: nelpim sice na tom pouzivat single quotes, ale urcite je lepsi drzet nejakou strukturu a ne to mit takhle splacane (nekde single nekde double) :-)
 
     $self = $_SERVER['REQUEST_URI'];
     $self = rtrim($self, "/"); // <--- mohlo by způsobovat problémy, dával by se do metod další parametr a to prázdný string ""
@@ -28,9 +33,9 @@ if (isset($_SERVER)) {
 
     if ($path === "") {
         if (!isset($self[1])) {
-            $path = "HomePage";
+            $path = 'HomePage';
         } else {
-            $path = '' . $self[1] . '';
+            $path = '' . $self[1] . ''; // TODO: tohle vlozeni do stringu jednak neni nute a za druhe je lepsi pouzit type casting (string) $self[1]
             $path = explode(".php", $path)[0];
         }
     }
@@ -42,23 +47,26 @@ if (isset($_SERVER)) {
 
 
     if (file_exists($controllerFile)) {
+        // TODO: to same jako vys - ten autoloader
         require_once $controllerFile;
         require_once $viewFile;
         require_once("Services/PDOConnector.php");
         $controllerClass = $__NAMESPACE_CONTROLLER_ . $path;
         $viewClass = $__NAMESPACE_VIEW_ . $path;
 
-
         $method = "";
-        if (count($self) > 2) {
-            $method = "$self[2]";
+        if (count($self) > 2) { // TODO: i kdyz to je tady jedno, tak count sam o sobe ti nezajisti ten index 2 (associativni pole)
+            $method = "$self[2]"; // TODO: stejne jako vyse
         }
-
+        // TODO: cele bych to jinak prepsal pomoci ternarniho operatoru takto:
+        // $method = isset($self[2]) ? $self[2] : '';
 
         $args = array();
         if (count($self) > 2) {
 
-
+            // TODO: na tohle obzvlášť pozor, ten count v tom foru se takhle počítá pro každý krok v cyklu
+            // TODO: u takhle malého pole tj jedno, ale u větších polí by to už bylo dost znát
+            // TODO: i když to tady ale nevadí, rozhodně to nepouzivej, at si to zajizes :-) Ten count pouzivat i vyse, vloz si ho tedy hned nahore do promenne a vyuzivej promennou.
             for ($i = 3; $i < count($self); $i++) {
                 $args[] .= $self[$i];
             }

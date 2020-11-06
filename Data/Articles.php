@@ -30,7 +30,7 @@ class Articles implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
         $sth->execute([":numOnPage" => $numOnPage]) or die("Not able to calculate max count of pages");
-        $data = $sth->fetchAll();
+        $data = $sth->fetchAll(); // TODO: muzes pouzit $sth->fetchColumn(), nevraci to pak pole
         $this->maxPages = $data[0];
     }
 
@@ -40,7 +40,7 @@ class Articles implements Data
 
         $offset = (int)$page * $numOnPage;
 
-
+        // TODO: nikdy never vstupum a vzdy pouzij prepared statments
         $sql = 'select * from article order by timestamp DESC limit ' . $numOnPage . ' offset ' . $offset . ' ';
         $articles = array();
 
@@ -80,7 +80,8 @@ class Articles implements Data
         $sql = "select * from article where id = :id";
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
-        $sth->execute(["id" => $id]) or die ("Not able to load article");
+        // TODO: execute or die neni dobry postup, odchydni vyjimku / vyres stav statementu - tohle se ti tady obecne prolina, vratim se k tomu v obecnem textu
+        $sth->execute(["id" => $id])  or die ("Not able to load article");
         if ($sth->rowCount() == 0) {
             throw new \RuntimeException("Article with this id does not exists");
         }

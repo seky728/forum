@@ -164,11 +164,8 @@ class User implements Data
         $sql = "select email from users where email like :email";
         $sth = $pdo->prepare($sql);
         $sth->execute(["email" => $email]) or die("not able to load email from db");
-        if ($sth->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return $sth->rowCount() > 0;
     }
 
     public function isUserExsitByNickName($nickName)
@@ -177,11 +174,8 @@ class User implements Data
         $sql = "select user_name from users where user_name like :userName";
         $sth = $pdo->prepare($sql);
         $sth->execute(["userName" => $nickName]) or die("not able to load nick name from db");
-        if ($sth->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return $sth->rowCount() > 0;
     }
 
     public function logout()

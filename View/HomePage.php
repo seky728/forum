@@ -62,6 +62,7 @@ class HomePage implements View
         $articles = "<div class='articles'>";
 
 
+        // TODO: znovu ten count :)
         for ($i = 0; $i < count($data); $i++) {
             $articles .= "<div class = 'article'>";
             $articles .= "<div class = 'background'>";
@@ -87,6 +88,7 @@ class HomePage implements View
             if ($commentsCount > 0) {
                 $articles .= '<div class="line"></div>';
                 $commentBlock = "<div class='comments'>";
+                // TODO: pokud je to mozne vyuzivej spise foreach
                 for ($l = 0; $l < $commentsCount; $l++) {
                     $comment = $data[$i]->getComments()[$l];
                     $commentBlock .= "<div class='comment'>";
