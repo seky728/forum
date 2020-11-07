@@ -34,6 +34,7 @@ class AdministrationPage implements View
         $divUsers = "";
         $tableUSers = "<table><thead><tr><th>Jméno</th><th>Příjmení</th><th>Email</th><th>Nickname</th><th>Rights</th><th>Rights Up</th><th>Rights Down</th></tr></thead><tbody>";
 
+        // TODO: na ten count jsem narazel iz ve front controlleru (index.php)
         for ($i = 0; $i < count($data); $i++) {
             if ($data[$i]->getId() == $_SESSION["userId"]) {
                 $divUsers .= "<div class='registerBlock'>

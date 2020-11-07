@@ -46,7 +46,7 @@ class HomePage implements Controller
         $this->currentPage = $page;
 
         if ($numOnPage === "") {
-            $numOnPage = $this->numOnPage;
+            $numOnPage = $this->numOnPage; // TODO: tady zase trochu hapruji typy. promenna $numOnPage mas defaultne definovano jako string, ale vkladas do ni intovou hodnotu z property
 
         } else {
             $this->numOnPage = $numOnPage;

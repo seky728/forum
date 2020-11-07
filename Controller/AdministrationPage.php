@@ -9,6 +9,7 @@ require_once "Data/User.php";
 use Data\User;
 use Data\Users;
 use http\Exception\RuntimeException;
+use Services\PDOConnector;
 use View\View;
 
 class AdministrationPage implements Controller
@@ -19,7 +20,7 @@ class AdministrationPage implements Controller
     /**
      * AdministrationPage constructor.
      */
-    public function __construct($pdo)
+    public function __construct($pdo) // TODO: od PHP7 můžeš pouzit deklaraci typu -> PDOConnector $pdo, mas tak jistotu, ze to tam nikdo neda nic jineho, IDE ti naseptava atd
     {
         $this->pdo = $pdo;
     }
@@ -27,7 +28,7 @@ class AdministrationPage implements Controller
     public function requireData()
     {
         $users = new Users($this->pdo);
-        $data = $users->loadUsers();
+        $data = $users->loadUsers(); // TODO: muzes rovnou zapsat jako: $users->loadUsers();
         return $data;
 
     }
@@ -42,6 +43,7 @@ class AdministrationPage implements Controller
 
     public function editUser()
     {
+        // TODO: je lepsi, aby ty funkce vubec nevyuzivali globalni promenne. $_SESSION ok, ale $_POST alespon predat jako parameter akce
         $name = $_POST["name"];
         $surname = $_POST["surname"];
         $email = $_POST["email"];

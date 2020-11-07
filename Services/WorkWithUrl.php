@@ -2,6 +2,7 @@
 
 class WorkWithUrl
 {
+    // TODO: tohle nemas nikde pouzite?
     public static function getAtributesFromUrl()
     {
         $self = $_SERVER['REQUEST_URI'];
