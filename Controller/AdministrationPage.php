@@ -2,13 +2,11 @@
 
 
 namespace Controller;
-require_once "Controller.php";
-require_once "Data/Users.php";
-require_once "Data/User.php";
+
 
 use Data\User;
 use Data\Users;
-use http\Exception\RuntimeException;
+use Exception;
 use Services\PDOConnector;
 use View\View;
 
@@ -19,8 +17,9 @@ class AdministrationPage implements Controller
 
     /**
      * AdministrationPage constructor.
+     * @param PDOConnector $pdo
      */
-    public function __construct($pdo) // TODO: od PHP7 můžeš pouzit deklaraci typu -> PDOConnector $pdo, mas tak jistotu, ze to tam nikdo neda nic jineho, IDE ti naseptava atd
+    public function __construct(PDOConnector $pdo) // TODO: od PHP7 můžeš pouzit deklaraci typu -> PDOConnector $pdo, mas tak jistotu, ze to tam nikdo neda nic jineho, IDE ti naseptava atd | ok
     {
         $this->pdo = $pdo;
     }
@@ -28,8 +27,7 @@ class AdministrationPage implements Controller
     public function requireData()
     {
         $users = new Users($this->pdo);
-        $data = $users->loadUsers(); // TODO: muzes rovnou zapsat jako: $users->loadUsers();
-        return $data;
+        return $users->loadUsers(); // TODO: muzes rovnou zapsat jako: $users->loadUsers(); | ok
 
     }
 
@@ -43,7 +41,7 @@ class AdministrationPage implements Controller
 
     public function editUser()
     {
-        // TODO: je lepsi, aby ty funkce vubec nevyuzivali globalni promenne. $_SESSION ok, ale $_POST alespon predat jako parameter akce
+        // TODO: je lepsi, aby ty funkce vubec nevyuzivali globalni promenne. $_SESSION ok, ale $_POST alespon predat jako parameter akce |------ tohle nechápu
         $name = $_POST["name"];
         $surname = $_POST["surname"];
         $email = $_POST["email"];
@@ -55,7 +53,7 @@ class AdministrationPage implements Controller
             $user = new User($this->pdo);
             $user->editUser($_SESSION["userId"], $name, $surname, $email, $nickName, $password);
         } else {
-            throw new RuntimeException("Hesla se neshodují");
+            throw new Exception("Hesla se neshodují");
         }
 
 

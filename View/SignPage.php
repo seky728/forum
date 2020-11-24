@@ -5,9 +5,8 @@ namespace View;
 
 
 use Data\Data;
-use Navigation;
+use SharedBlocks\Navigation;
 
-require_once "SharedBlocks/Navigation.php";
 
 class SignPage implements View
 {

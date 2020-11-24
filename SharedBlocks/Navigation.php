@@ -1,4 +1,6 @@
 <?php
+namespace SharedBlocks;
+
 
 class Navigation
 {

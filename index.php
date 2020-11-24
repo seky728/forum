@@ -1,8 +1,11 @@
 <?php
 
+
 use Services\PDOConnector;
 
+
 session_start();
+
 
 /**
  * @var Controller\Controller
@@ -19,8 +22,17 @@ $__NAMESPACE_VIEW_ = "\\View\\";
 // TODO: pak vsechny tridy, ktere nemas requirenute skoci do autoloaderu a tam dle nejake logiky (kterou si nadefinujes) tu tridu nactou
 // TODO: to jak ten autoloader nadefinuješ by v ideálním případě mělo odpovídat PSR-4 standardu viz https://www.php-fig.org/psr/psr-4/
 // TODO: kdyby tu nebylo neco jasne, tak se určite ptes.
-require_once("View/View.php");
-require_once("Controller/Controller.php");
+//require_once("View/View.php");
+//require_once("Controller/Controller.php");
+//TODO: To stačilo opravdu jen takhle?
+spl_autoload_register(function ($class_name) {
+    require_once $class_name . '.php';
+});
+
+
+set_exception_handler(function ($exception) {
+    echo "Uncaught exception: ", $exception->getMessage(), "\n";
+});
 
 
 if (isset($_SERVER)) {
@@ -48,9 +60,9 @@ if (isset($_SERVER)) {
 
     if (file_exists($controllerFile)) {
         // TODO: to same jako vys - ten autoloader
-        require_once $controllerFile;
-        require_once $viewFile;
-        require_once("Services/PDOConnector.php");
+        // require_once $controllerFile;
+        // require_once $viewFile;
+        //require_once("Services/PDOConnector.php");
         $controllerClass = $__NAMESPACE_CONTROLLER_ . $path;
         $viewClass = $__NAMESPACE_VIEW_ . $path;
 

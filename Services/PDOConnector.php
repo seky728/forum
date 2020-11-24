@@ -1,10 +1,9 @@
 <?php
 namespace Services;
 
-use Data\Article;
 use PDO;
 
-require_once("Data/Articles.php"); // TODO: tohle neni treba + obecne tady ta fasada byt nemusi a můzes rovnou pouzit PDO, nemusis ale upravovat
+//require_once("Data/Articles.php"); // TODO: tohle neni treba + obecne tady ta fasada byt nemusi a můzes rovnou pouzit PDO, nemusis ale upravovat | tohle je spíš asi jen zapomenutý
 
 class PDOConnector
 {

@@ -2,7 +2,7 @@
 
 class WorkWithUrl
 {
-    // TODO: tohle nemas nikde pouzite?
+    // TODO: tohle nemas nikde pouzite? | nemám, využíval jsem to na stránkování ale bylo hrozně špatně a v průběhu mě napadl lepší postup.
     public static function getAtributesFromUrl()
     {
         $self = $_SERVER['REQUEST_URI'];

@@ -3,9 +3,8 @@
 
 namespace View;
 
-use Navigation;
+use SharedBlocks\Navigation;
 
-require_once("SharedBlocks/Navigation.php");
 
 
 class AdministrationPage implements View

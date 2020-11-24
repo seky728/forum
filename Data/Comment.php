@@ -4,7 +4,7 @@
 namespace Data;
 
 
-use Services\PDOConnector;
+use Exception;
 
 class Comment implements Data
 {
@@ -41,7 +41,9 @@ class Comment implements Data
         $sql = "INSERT INTO comments (Id, Text, Timestamp, Id_user, Id_article) VALUES (NULL, :commentText, CURRENT_TIMESTAMP, :idUser, :idArticle)";
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
-        $sth->execute(array(':commentText' => $this->text, ':idUser' => $this->id_user, ':idArticle' => $this->id_article)) or die("Not able to insert comment");
+        if (!$sth->execute(array(':commentText' => $this->text, ':idUser' => $this->id_user, ':idArticle' => $this->id_article))) {
+            throw new Exception("Not able to insert comment");
+        }
     }
 
 

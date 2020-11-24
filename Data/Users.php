@@ -2,10 +2,9 @@
 
 
 namespace Data;
-require_once("Data.php");
-require_once("User.php");
 
 
+use Exception;
 use Services\PDOConnector;
 
 class Users implements Data
@@ -31,9 +30,11 @@ class Users implements Data
         $pdo = $this->pdo->getPdo();
         $sql = "select id, name, surname, email, user_name, rights from users";
         $sth = $pdo->prepare($sql);
-        $sth->execute() or die("Not able to load all users");
+        if (!$sth->execute()) {
+            throw new Exception("Not able to load all users");
+        }
         if ($sth->columnCount() == 0) {
-            throw new \RuntimeException("Nikdo nebyl nalezen");
+            throw new Exception("Nikdo nebyl nalezen");
         }
         $data = $sth->fetchAll();
 

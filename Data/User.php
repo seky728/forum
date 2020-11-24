@@ -4,13 +4,8 @@
 namespace Data;
 
 
-use http\Exception\RuntimeException;
+use Exception;
 use Services\PDOConnector;
-
-
-require_once "Data.php";
-require_once "Services/PDOConnector.php";
-
 
 
 class User implements Data
@@ -47,7 +42,9 @@ class User implements Data
         $sql = "set @valueRights = (select Rights from users where id = :userId and Rights < 3);
                 UPDATE `users` SET `Rights` = (@valueRights + 1)  WHERE `users`.`Id` = :userId;";
         $sth = $pdo->prepare($sql);
-        $sth->execute([":userId" => $idUser]) or die("Not able to zvýšit práva");
+        if (!$sth->execute([":userId" => $idUser])) {
+            throw new Exception("Not able to zvýšit práva");
+        }
 
 
     }
@@ -58,7 +55,9 @@ class User implements Data
         $sql = "set @valueRights = (select Rights from users where id = :userId and Rights > 1);
                 UPDATE `users` SET `Rights` = (@valueRights -1)  WHERE `users`.`Id` = :userId;";
         $sth = $pdo->prepare($sql);
-        $sth->execute([":userId" => $idUser]) or die("Not able to zvýšit práva");
+        if (!$sth->execute([":userId" => $idUser])) {
+            throw new Exception("Not able to zvýšit práva");
+        }
 
 
     }
@@ -76,11 +75,15 @@ class User implements Data
         if ($password !== "") {
             $sql = "UPDATE `users` SET `Name` = :name, `Surname` = :surname, `Email` = :email , `User_name` = :userName, `Password` = :password WHERE `users`.`Id` = :id;";
             $sth = $pdo->prepare($sql);
-            $sth->execute([":name" => $name, ":surname" => $surname, ":email" => $email, ":userName" => $userName, ":password" => $password, ":id" => $id]) or die("Not able to update user with new password");
+            if (!$sth->execute([":name" => $name, ":surname" => $surname, ":email" => $email, ":userName" => $userName, ":password" => $password, ":id" => $id])) {
+                throw new Exception("Not able to update user with new password");
+            }
         } else {
             $sql = "UPDATE `users` SET `Name` = :name, `Surname` = :surname, `Email` = :email , `User_name` = :userName WHERE `users`.`Id` = :id;";
             $sth = $pdo->prepare($sql);
-            $sth->execute([":name" => $name, ":surname" => $surname, ":email" => $email, ":userName" => $userName, ":id" => $id]) or die("Not able to update user with no password");
+            if (!$sth->execute([":name" => $name, ":surname" => $surname, ":email" => $email, ":userName" => $userName, ":id" => $id])) {
+                throw new Exception("Not able to update user with no password");
+            }
         }
 
     }
@@ -94,17 +97,16 @@ class User implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sql = "select * from users where User_name = :userName";
         $sth = $pdo->prepare($sql);
-        $sth->execute([":userName" => $userName]) or die("Not able to select user by userName");
+        $sth->execute([":userName" => $userName]);
 
         if ($sth->rowCount() == 0) {
-
-            throw new \RuntimeException("Nikdo takový nebyl v db nalezen");
+            throw new Exception("Nikdo takový nebyl v db nalezen");
         }
 
         $user = $sth->fetchAll()[0];
 
         if ($user["Password"] !== $password) {
-            throw new RuntimeException("Hesla se neshodují");
+            throw new Exception("Hesla se neshodují");
         }
         $_SESSION["userId"] = $user["Id"];
         $_SESSION["Rights"] = $user["Rights"];
@@ -115,9 +117,12 @@ class User implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sql = "select name, surname, email, user_name, password, rights from users where id = :idUser";
         $sth = $pdo->prepare($sql);
-        $sth->execute(["idUser" => $id]) or die("not able to load user");
+        if (!$sth->execute(["idUser" => $id])) {
+            throw new Exception("not able to load user");
+        }
+
         if ($sth->columnCount() == 0) {
-            throw new \RuntimeException("Nikdo nebyl nalezen");
+            throw new Exception("Nikdo nebyl nalezen");
         }
 
         $user = $sth->fetchAll()[0];
@@ -145,17 +150,19 @@ class User implements Data
         $password = htmlspecialchars($password);
 
         if ($this->isUserExtistByEmail($email)) {
-            throw new \RuntimeException("tento email je již registrovaný");
+            throw new Exception("tento email je již registrovaný");
         }
 
         if ($this->isUserExsitByNickName($userName)) {
-            throw new \RuntimeException("Tato přezdívka je již použitá");
+            throw new Exception("Tato přezdívka je již použitá");
         }
 
         $pdo = $this->pdoConnector->getPdo();
         $sql = "INSERT INTO users (Id,Name, Surname, Email, User_name, Password) VALUES (NULL, :name, :surname, :email, :userName, :password);";
         $sth = $pdo->prepare($sql);
-        $sth->execute(["name" => $name, "surname" => $surname, "email" => $email, "userName" => $userName, "password" => $password]) or die("not able to register user");
+        if (!$sth->execute(["name" => $name, "surname" => $surname, "email" => $email, "userName" => $userName, "password" => $password])) {
+            throw new Exception("Nepovedlo se registrovat uživatele");
+        }
     }
 
     public function isUserExtistByEmail($email)
@@ -163,7 +170,9 @@ class User implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sql = "select email from users where email like :email";
         $sth = $pdo->prepare($sql);
-        $sth->execute(["email" => $email]) or die("not able to load email from db");
+        if (!$sth->execute(["email" => $email])) {
+            throw new Exception("not able to load email from db");
+        }
 
         return $sth->rowCount() > 0;
     }
@@ -173,7 +182,9 @@ class User implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sql = "select user_name from users where user_name like :userName";
         $sth = $pdo->prepare($sql);
-        $sth->execute(["userName" => $nickName]) or die("not able to load nick name from db");
+        if (!$sth->execute(["userName" => $nickName])) {
+            throw new Exception("not able to load nick name from db");
+        }
 
         return $sth->rowCount() > 0;
     }

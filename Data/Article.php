@@ -3,10 +3,9 @@
 
 namespace Data;
 
-require_once "Comment.php";
-require_once "User.php";
 
-
+use Exception;
+use Services\CheckText;
 use Services\PDOConnector;
 
 class Article
@@ -47,13 +46,15 @@ class Article
         $sql = "select * from comments where id_article = :articleId";
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
-        $sth->execute(array(':articleId' => $this->id)) or die("Not able to load comments");
+        if (!$sth->execute(array(':articleId' => $this->id))) {
+            throw new Exception("Not able to load comments");
+        }
         $data = $sth->fetchAll();
         foreach ($data as $comment) {
             $idUser = $comment[3];
             $user = new User($this->pdoConnector);
             $user->loadUserName($idUser);
-            $loadedComment = new Comment($this->pdoConnector, $comment[0], $comment[1], $comment[2], $comment[3], $comment[4]);
+            $loadedComment = new Comment($this->pdoConnector, $comment[0], CheckText::allowTags($comment[1]), $comment[2], $comment[3], $comment[4]);
             $loadedComment->setAuthorName($user->getUserName());
             $this->comments[] = $loadedComment;
 

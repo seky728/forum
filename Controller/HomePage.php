@@ -2,10 +2,10 @@
 
 namespace Controller;
 
-include('Services/PDOConnector.php');
 
 use Data\Articles;
 use Data\Comment;
+use Exception;
 use View\View;
 
 
@@ -40,13 +40,20 @@ class HomePage implements Controller
         }
     }
 
-    public function pagination($page, $numOnPage = "")
+    public function pagination($page, $numOnPage = null)
     {
+        if (!is_numeric($page)) {
+            throw new Exception("Page is not numeric");
+        }
+
+        if (!is_numeric($numOnPage) && $numOnPage !== null) {
+            throw new Exception("Num On Page is not numeric");
+        }
 
         $this->currentPage = $page;
 
-        if ($numOnPage === "") {
-            $numOnPage = $this->numOnPage; // TODO: tady zase trochu hapruji typy. promenna $numOnPage mas defaultne definovano jako string, ale vkladas do ni intovou hodnotu z property
+        if ($numOnPage === null) {
+            $numOnPage = $this->numOnPage; // TODO: tady zase trochu hapruji typy. promenna $numOnPage mas defaultne definovano jako string, ale vkladas do ni intovou hodnotu z property | takže null bude ok?
 
         } else {
             $this->numOnPage = $numOnPage;

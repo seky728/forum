@@ -2,12 +2,10 @@
 
 
 namespace Data;
+use Exception;
+use PDO;
 use Services\CheckText;
 use Services\PDOConnector;
-
-require_once("Data.php");
-require_once("Article.php");
-require_once("Services/CheckText.php");
 
 
 class Articles implements Data
@@ -30,8 +28,8 @@ class Articles implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
         $sth->execute([":numOnPage" => $numOnPage]) or die("Not able to calculate max count of pages");
-        $data = $sth->fetchAll(); // TODO: muzes pouzit $sth->fetchColumn(), nevraci to pak pole
-        $this->maxPages = $data[0];
+        $this->maxPages = $sth->fetchColumn(); // TODO: muzes pouzit $sth->fetchColumn(), nevraci to pak pole | ok
+        //$this->maxPages = $data[0];
     }
 
 
@@ -40,13 +38,18 @@ class Articles implements Data
 
         $offset = (int)$page * $numOnPage;
 
-        // TODO: nikdy never vstupum a vzdy pouzij prepared statments
-        $sql = 'select * from article order by timestamp DESC limit ' . $numOnPage . ' offset ' . $offset . ' ';
+        // TODO: nikdy never vstupum a vzdy pouzij prepared statments - opraveno
+        $sql = 'select * from article order by timestamp DESC limit  :numOnPage offset  :offset';
         $articles = array();
 
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
+
+
+        $sth->bindValue(':numOnPage', intval($numOnPage), PDO::PARAM_INT);
+        $sth->bindValue(':offset', intval($offset), PDO::PARAM_INT);
         $sth->execute();
+
         $data = $sth->fetchAll();
         foreach ($data as $item) {
             $idUser = $item[3];
@@ -81,9 +84,9 @@ class Articles implements Data
         $pdo = $this->pdoConnector->getPdo();
         $sth = $pdo->prepare($sql);
         // TODO: execute or die neni dobry postup, odchydni vyjimku / vyres stav statementu - tohle se ti tady obecne prolina, vratim se k tomu v obecnem textu
-        $sth->execute(["id" => $id])  or die ("Not able to load article");
+        $sth->execute(["id" => $id]);
         if ($sth->rowCount() == 0) {
-            throw new \RuntimeException("Article with this id does not exists");
+            throw new Exception("Article with this id does not exists");
         }
         $data = $sth->fetchAll();
 
@@ -99,7 +102,9 @@ class Articles implements Data
             $sql = "DELETE FROM article WHERE article.Id = :id";
             $pdo = $this->pdoConnector->getPdo();
             $sth = $pdo->prepare($sql);
-            $sth->execute(["id" => $id]) or die("Not able to delete article");
+            if (!$sth->execute(["id" => $id])) {
+                throw new Exception("Not able to delete article");
+            }
         }
 
     }

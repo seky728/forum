@@ -5,13 +5,9 @@ namespace View;
 
 
 use Data\Data;
-use Navigation;
+use SharedBlocks\Navigation;
 use SharedBlocks\ArticlesManagementMenu;
 use WorkWithUrl;
-
-require_once "SharedBlocks/Navigation.php";
-require_once "SharedBlocks/ArticlesManagementMenu.php";
-require_once "Services/WorkWithUrl.php";
 
 
 class HomePage implements View
